@@ -1,28 +1,30 @@
-import sys
+def prime_factors(n):
+    factors = []
+    divisor = 2
+    
+    while n > 1:
+        while n % divisor == 0:
+            factors.append(divisor)
+            n //= divisor
+        divisor += 1
+    
+    return factors
 
-public_key = int(input("Please enter the public key: "))
-g = int(input("Please enter a number: "))
+try:
+    public_key = int(input("Please enter a public key: "))
+    if public_key <= 0:
+        raise ValueError("Please enter a positive integer.")
+except ValueError as e:
+    print(e)
+    exit()
+print("-"*23)
+print("Decrypting key.......")
+result = prime_factors(public_key)
+print("-"*23, "\n")
 
-r = 0
-remainder = 2
-while remainder != 1:
-    for exponent in range(1,65535):
-        remainder = g**exponent % public_key
-        r += 1
-        print(remainder)
-        
-        if remainder == 1:
-            print("-"*11)
-            print("Remainder has reached: ", remainder)
-            print("period = ", r)
-            print("-"*11)
-            print("\n Performing further calculations \n")
-            p = (g**(r/2))+1
-            p_r = p % public_key
-            while p_r != 0:
-                
-            q = (g**(r/2)-1)
-            print(p, "-", q)
-            sys.exit()
-        else:
-            pass
+if len(result) == 1:
+    print(f"{public_key} is a prime number.")
+elif len(result) == 2:
+    print(f"The private keys of {public_key} are: {result}")
+else:
+    print(f"{public_key} is not a product of two prime numbers but here are the prime factors regardless: {result}")
